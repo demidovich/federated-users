@@ -1,0 +1,8 @@
+Postgres:
+  Host: localhost
+  Port: 15432
+  User: postgres
+  Password: postgres
+  Dbname: federated_db
+  Sslmode: false
+  Driver: pgx

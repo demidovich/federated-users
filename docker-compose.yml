@@ -1,0 +1,28 @@
+version: "3.8"
+
+networks:
+  federated-network:
+    driver: bridge
+
+services:
+  postgres:
+    build:
+      context: ./docker
+      dockerfile: postgres.Dockerfile
+      args:
+        HOST_UID: ${HOST_UID:-70}
+        HOST_GID: ${HOST_GID:-70}
+    image: federated-postgres
+    container_name: federated-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: federated_db
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./docker/var/postgres:/var/lib/postgresql/data/pgdata:rw
+    ports:
+      - "15432:5432"
+    networks:
+      - federated-network
+    restart: always

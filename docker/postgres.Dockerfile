@@ -1,0 +1,12 @@
+FROM demidovich/postgres:14.7-debian
+
+ARG HOST_UID=1000
+ARG HOST_GID=1000
+ENV HOST_UID=${HOST_UID:-1000} \
+    HOST_GID=${HOST_GID:-1000}
+
+RUN usermod -u ${HOST_UID} postgres
+
+USER $HOST_UID
+
+EXPOSE 5432
