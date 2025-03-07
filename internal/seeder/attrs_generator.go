@@ -21,15 +21,17 @@ func newAttrsGenerator(a person.Attrs) attrsGenerator {
 	}
 }
 
-func (a attrsGenerator) generateJson(attrsCount int) string {
+func (a attrsGenerator) generateJson(federationUuid string, attrsCount int) string {
 	if attrsCount > len(a.names) {
 		attrsCount = len(a.names)
 	}
 
-	attrs := make(map[string]any, attrsCount)
-	for i := range attrsCount {
+	attrs := make(map[string]any, attrsCount+1)
+	attrs["FederationUuid"] = federationUuid
+
+	for i := 1; i <= attrsCount; i++ {
 		name := a.names[i]
-		value := a.generatedValue(name)
+		value := a.randValue(name)
 		if value != "" {
 			attrs[name] = value
 		}
@@ -43,7 +45,7 @@ func (a attrsGenerator) generateJson(attrsCount int) string {
 	return string(jsonBytes)
 }
 
-func (a attrsGenerator) generatedValue(name string) string {
+func (a attrsGenerator) randValue(name string) string {
 
 	if strings.HasPrefix(name, "FirstName") {
 		return faker.FirstName()

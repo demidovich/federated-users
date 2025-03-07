@@ -56,6 +56,20 @@ func (m *migrator) Up() error {
 	return err
 }
 
+func (m *migrator) Force() error {
+	status := m.Status()
+	tx := m.db.MustBegin()
+
+	err := m.goMigrate.Force(int(status.Version))
+	if err != nil {
+		tx.Rollback()
+	} else {
+		tx.Commit()
+	}
+
+	return err
+}
+
 func (m *migrator) Down() error {
 	tx := m.db.MustBegin()
 
@@ -67,4 +81,14 @@ func (m *migrator) Down() error {
 	}
 
 	return err
+}
+
+func (m *migrator) Status() migrationStatus {
+	version, dirty, err := m.goMigrate.Version()
+
+	return migrationStatus{
+		Version: version,
+		Dirty:   dirty,
+		Error:   err,
+	}
 }

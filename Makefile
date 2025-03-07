@@ -32,8 +32,23 @@ logs: ## Logs
 # Postgres
 # ============================================================================
 
+migrate: ## Apply database migrations
+	go run cmd/main.go migrate
+
+migrate-rollback: ## Rollback database migrations
+	go run cmd/main.go migrate:rollback
+
+migrate-force: ## Apply force database migrations
+	go run cmd/main.go migrate:force
+
+migrate-status: ## Status database migrations
+	go run cmd/main.go migrate:status
+
 psql: ## Psql
 	docker exec --interactive --tty federated-postgres psql federated_db
+
+shell-postgres: ## Shell of postgresql container
+	docker exec --interactive --tty federated-postgres /bin/bash
 
 # Modules
 # ============================================================================
